@@ -27,11 +27,12 @@ testTranslation('SettingAT',5);
 
 ## Models
 Contains 17 different demo models prepared for Hecate.
+
 * **AFC**: A controller for air-to-fuel ration in an engine.
 * **AT**: Model of a car automatic transmission with gears 1 to 4
 * **AT2**: A second variation of Automatic Transmission
 * **CC**: Simulation of a system formed by five cars
-* **EKF**: Extended Kalman Filter
+* **EKF***: Extended Kalman Filter
 * **EU**: A model that computes the rotation matrix given a set of Euler angles
 * **FS**: Model of a damping system for wing oscillations
 * **HEV**: A hybrid electric vehicle
@@ -45,6 +46,8 @@ Contains 17 different demo models prepared for Hecate.
 * **TUI**: A model that applies Tustin Integrator for flight control
 * **WT**: A model of a wind turbine
 
+**Note(*):** The model for EKF cannot be released to the public, so it is missing from the `Model` folder. The `TestResults` folder still contains the results obtained on this model.
+
 ## RQ3
 Contains files/figures and scripts for research question 3 - Usefulness.
 
@@ -52,7 +55,10 @@ Contains files/figures and scripts for research question 3 - Usefulness.
 Contains shell scripts used for launching test runs on a UNIX based server.
 
 ## TestResults
-The directory to which Hecate test results are saved. They are saved in a .mat format using the naming format: '<Tool>_<model>_<date>_<time>'.mat
+The directory to which Hecate test results are saved. They are saved in a .mat format using the naming format: 
+ 
+	<Tool>_<model>_<date>_<time>.mat
+	
 The three available tools being Hecate, S-TALIRO, and TestTranslation.
 
 ## TranslationFunctions
