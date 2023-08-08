@@ -12,6 +12,7 @@ To run this tool, it is necessary to download S-Taliro from the following link: 
 In addition, the following Matlab script must be removed from the S-Taliro folder: `./auxiliary/Compute_Robustness.m`
 
 The folder containing S-Taliro should then be placed in the main folder (at the same level as `TranslationFunctions`) and be renamed `staliro`.
+Also delete or remove from path the folders `staliro\benchmarks` and `staliro\demos`, as they can potentially create conflicts with Hecate functions and models.
 
 ## How to Run
 Execute runHecate, runSTaliro, and TestTranslation by providing the corresponding setting file for the model of interest as a character datatype, and the number of runs as an integer. For example, in the MATLAB terminal Hecate and S-TALIRO can be executed for for the AT model for 5 runs by using:
