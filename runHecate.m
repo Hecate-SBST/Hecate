@@ -35,7 +35,7 @@ function runHecate(settingName,n_runs)
     else
         error('There is no Setting file in the current workpath with the given name.')
     end
-
+    
     % Set the name of the model
     if isa(model,'char')
         modelname = model;
@@ -45,7 +45,7 @@ function runHecate(settingName,n_runs)
         [test_assessment_path,test_sequence_path] = simConfig(modelname,activeScenarioTA,activeScenarioTS,input_param,model);
     else
         error('Model type is not supported.')
-    end
+    end    
 
     %% Set up translation map
 
@@ -96,9 +96,9 @@ function runHecate(settingName,n_runs)
     fileStr = datestr(now,'dd_mm_yy_HHMM');
     if contains(settingName,'setting','IgnoreCase',true)
         nameStr = erase(settingName,{'Setting','setting'});
-        fileStr = strcat('./TestResults/Hecate_',nameStr,'_',fileStr,'.mat');
+        fileStr = strcat('./TestResults/', tool, '_', nameStr,'_',fileStr,'.mat');
     else
-        fileStr = strcat('./TestResults/Hecate_',model,'_',fileStr,'.mat');
+        fileStr = strcat('./TestResults/', tool, '_', model,'_',fileStr,'.mat');
     end
 
     % Check that the correct version of 'Compute_Robustness' is active
