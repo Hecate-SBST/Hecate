@@ -13,8 +13,8 @@ In addition, the following Matlab script must be removed from the S-Taliro folde
 
 Moreover, in the S-Taliro folder, the file `./demos/RTTs for Testing ADS/src/modifications_to_staliro/optimization/SA_Taliro.m` must be edited by adding before the first call to the Compute_Rombustness function, the following lines
 ```
-addpath('TranslationFunctions/Function_STaliro')
-rmpath('TranslationFunctions/Function_Hecate')
+rmpath('TranslationFunctions/Function_STaliro')
+addpath('TranslationFunctions/Function_Hecate')
 ```
 
 The folder containing S-Taliro should then be placed in the main folder (at the same level as `TranslationFunctions`) and be renamed `staliro`.
