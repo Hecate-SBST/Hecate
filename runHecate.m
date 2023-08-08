@@ -65,7 +65,7 @@ function runHecate(settingName,n_runs)
     transTableTS = getAllTrans(stepTableTS,test_sequence_path);
     
     % Create the state Transition Map
-    [stepTableTA, transTableTA, junctionTableTA] = buildTransitionMap(test_assessment_path, stepTableTA, transTableTA, fitTable);
+    [~, ~, ~] = buildTransitionMap(test_assessment_path, stepTableTA, transTableTA, fitTable);
 
     % Check the given input parameters
     input_search = checkTestSequenceParameter(test_sequence_path,input_param,stepTableTS,transTableTS);
