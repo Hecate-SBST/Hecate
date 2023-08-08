@@ -1,2 +1,4 @@
 # Ignore the sorting file for MacOS
 *.DS_Store
+staliro
+Models/AT/sldemo_autotrans_data.mat
