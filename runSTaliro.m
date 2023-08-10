@@ -54,13 +54,7 @@ function runSTaliro(settingName,n_runs)
         mkdir('TestResults')
     end
 
-    fileStr = datestr(now,'dd_mm_yy_HHMM');
-    if contains(settingName,'setting','IgnoreCase',true)
-        nameStr = erase(settingName,{'Setting','setting'});
-        fileStr = strcat('./TestResults/STaliro_',nameStr,'_',fileStr,'.mat');
-    else
-        fileStr = strcat('./TestResults/STaliro_',model,'_',fileStr,'.mat');
-    end
+    fileStr = getFileName(tool)
     
     % Check that the correct version of 'Compute_Robustness' is active
     addpath('TranslationFunctions/Function_STaliro')
