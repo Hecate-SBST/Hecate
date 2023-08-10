@@ -54,7 +54,7 @@ function runSTaliro(settingName,n_runs)
         mkdir('TestResults')
     end
 
-    fileStr = getFileName(tool)
+    fileStr = getFileName(tool, settingName)
     
     % Check that the correct version of 'Compute_Robustness' is active
     addpath('TranslationFunctions/Function_STaliro')
