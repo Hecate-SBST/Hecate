@@ -31,12 +31,13 @@ function runHecate(settingName,n_runs)
     global SettingFile;
     if exist(settingName,'file') == 2
         SettingFile = settingName;
-        eval(settingName);  %setting model file
+        eval(settingName);  % Load settings from setting model file
     else
         error('There is no Setting file in the current workpath with the given name.')
     end
     
-    % Set the name of the model
+    % Set the name of the model and execute it in order to load test
+    % assessments and sequences
     if isa(model,'char')
         modelname = model;
         [test_assessment_path,test_sequence_path] = simConfig(modelname,activeScenarioTA,activeScenarioTS,input_param);
@@ -109,23 +110,35 @@ function runHecate(settingName,n_runs)
     History = [];
     Options = [];
 
-    % Run Hecate
-    for ii = 1:n_runs
-        fprintf('\n\t\t*\t*\t*\n\nRun: %i/%i\n\n',ii,n_runs)
-        [results, history, opt] = staliro(modelname, init_cond, input_range_hecate, cp_array_hecate, phi_hecate, preds_hecate, simulationTime, hecate_opt);
-
-        % Save the name of the Hecate parameters
-        results.HecateParam = {input_search.Name}';
-        history.HecateParam = {input_search.Name}';
-
-        % Add results to the array
-        Results = [Results; results];
-        History = [History; history];
-        Options = [Options; opt];
-
-%         save(fileStr);
-	    assignin('base','ResultsHecate',Results)
-        assignin('base','HistoryHecate',History)
+    % Execute HECATE in a Try-Catch block so that if execution fails, the
+    % commented part (i.e., test assesments) are then uncommented
+    try
+        % Run Hecate
+        for ii = 1:n_runs
+            fprintf('\n\t\t*\t*\t*\n\nRun: %i/%i\n\n',ii,n_runs)
+            [results, history, opt] = staliro(modelname, init_cond, input_range_hecate, cp_array_hecate, phi_hecate, preds_hecate, simulationTime, hecate_opt);
+    
+            % Save the name of the Hecate parameters
+            results.HecateParam = {input_search.Name}';
+            history.HecateParam = {input_search.Name}';
+    
+            % Add results to the array
+            Results = [Results; results];
+            History = [History; history];
+            Options = [Options; opt];
+    
+    %         save(fileStr);
+	        assignin('base','ResultsHecate',Results)
+            assignin('base','HistoryHecate',History)
+        end
+    catch ME
+        % Uncomment the Test Assessment block
+        set_param(test_assessment_path,'Commented','off');
+        % Close Simulink model
+        save_system(modelname)
+        causeException = MException('MATLAB:Hecate:HecateError',msg);
+        ME = addCause(ME,causeException);
+        rethrow(ME)
     end
     
     %% Close the model and save the results

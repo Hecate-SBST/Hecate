@@ -85,17 +85,29 @@ function runSTaliro(settingName,n_runs)
     History = [];
     Options = [];
     
-    % Run S-Taliro
-    for ii = 1:n_runs
-        fprintf('\n\t\t*\t*\t*\n\nRun: %i/%i\n\n',ii,n_runs)
-        [results, history, opt] = staliro(modelname, init_cond, staliro_InputBounds, staliro_cp_array, phi, preds, simulationTime, staliro_opt);
-        Results = [Results; results];
-        History = [History; history];
-        Options = [Options; opt];
-
-        assignin('base','ResultsSTaliro',Results)
-        assignin('base','HistorySTaliro',History)
-%         save(fileStr);
+    % Execute S-Taliro in a Try-Catch block so that if execution fails, the
+    % commented part (i.e., test assesments) are then uncommented
+    try
+        % Run S-Taliro
+        for ii = 1:n_runs
+            fprintf('\n\t\t*\t*\t*\n\nRun: %i/%i\n\n',ii,n_runs)
+            [results, history, opt] = staliro(modelname, init_cond, staliro_InputBounds, staliro_cp_array, phi, preds, simulationTime, staliro_opt);
+            Results = [Results; results];
+            History = [History; history];
+            Options = [Options; opt];
+    
+            assignin('base','ResultsSTaliro',Results)
+            assignin('base','HistorySTaliro',History)
+    %         save(fileStr);
+        end
+    catch ME
+        % Uncomment the Test Assessment block
+        set_param(test_assessment_path,'Commented','off');
+        % Close Simulink model
+        save_system(modelname)
+        causeException = MException('MATLAB:Hecate:STaliroError',msg);
+        ME = addCause(ME,causeException);
+        rethrow(ME)
     end
     
     %% Close the model and save the results
