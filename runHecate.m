@@ -87,12 +87,6 @@ function runHecate(settingName,n_runs)
     %% Run Hecate
 
     tool = 'Hecate';
-
-    % Create name of save file
-    if ~isfolder('TestResults')
-        mkdir('TestResults')
-    end
-    
     fileStr = getFileName(tool, settingName)
 
     % Check that the correct version of 'Compute_Robustness' is active

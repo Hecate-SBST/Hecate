@@ -7,7 +7,12 @@ function [fileName] = getFileName(tool, settingName)
 %   Outputs:
 %       fileName: char array containing file name
 
-fileName = datestr(now,'dd_mm_yy_HHMM');
+    % Create name of save file
+    if ~isfolder('TestResults')
+        mkdir('TestResults')
+    end
+
+    fileName = datestr(now,'dd_mm_yy_HHMM');
     if contains(settingName,'setting','IgnoreCase',true)
         nameStr = erase(settingName,{'Setting','setting'});
         fileName = strcat('./TestResults/', tool, '_', nameStr,'_',fileName,'.mat');

@@ -48,12 +48,6 @@ function runSTaliro(settingName,n_runs)
     %% Run S-Taliro
 
     tool = 'S-Taliro';
-
-    % Create name of save file
-    if ~isfolder('TestResults')
-        mkdir('TestResults')
-    end
-
     fileStr = getFileName(tool, settingName)
     
     % Check that the correct version of 'Compute_Robustness' is active
