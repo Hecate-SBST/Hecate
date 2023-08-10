@@ -31,12 +31,13 @@ function runHecate(settingName,n_runs)
     global SettingFile;
     if exist(settingName,'file') == 2
         SettingFile = settingName;
-        eval(settingName);  %setting model file
+        eval(settingName);  % Load settings from setting model file
     else
         error('There is no Setting file in the current workpath with the given name.')
     end
-
-    % Set the name of the model
+    
+    % Set the name of the model and execute it in order to load test
+    % assessments and sequences
     if isa(model,'char')
         modelname = model;
         [test_assessment_path,test_sequence_path] = simConfig(modelname,activeScenarioTA,activeScenarioTS,input_param);
@@ -45,7 +46,7 @@ function runHecate(settingName,n_runs)
         [test_assessment_path,test_sequence_path] = simConfig(modelname,activeScenarioTA,activeScenarioTS,input_param,model);
     else
         error('Model type is not supported.')
-    end
+    end    
 
     %% Set up translation map
 
@@ -65,7 +66,7 @@ function runHecate(settingName,n_runs)
     transTableTS = getAllTrans(stepTableTS,test_sequence_path);
     
     % Create the state Transition Map
-    [stepTableTA, transTableTA, junctionTableTA] = buildTransitionMap(test_assessment_path, stepTableTA, transTableTA, fitTable);
+    [~, ~, ~] = buildTransitionMap(test_assessment_path, stepTableTA, transTableTA, fitTable);
 
     % Check the given input parameters
     input_search = checkTestSequenceParameter(test_sequence_path,input_param,stepTableTS,transTableTS);
@@ -87,19 +88,7 @@ function runHecate(settingName,n_runs)
     %% Run Hecate
 
     tool = 'Hecate';
-
-    % Create name of save file
-    if ~isfolder('TestResults')
-        mkdir('TestResults')
-    end
-    
-    fileStr = datestr(now,'dd_mm_yy_HHMM');
-    if contains(settingName,'setting','IgnoreCase',true)
-        nameStr = erase(settingName,{'Setting','setting'});
-        fileStr = strcat('./TestResults/Hecate_',nameStr,'_',fileStr,'.mat');
-    else
-        fileStr = strcat('./TestResults/Hecate_',model,'_',fileStr,'.mat');
-    end
+    fileStr = getFileName(tool, settingName)
 
     % Check that the correct version of 'Compute_Robustness' is active
     addpath('TranslationFunctions/Function_Hecate')
@@ -121,23 +110,35 @@ function runHecate(settingName,n_runs)
     History = [];
     Options = [];
 
-    % Run Hecate
-    for ii = 1:n_runs
-        fprintf('\n\t\t*\t*\t*\n\nRun: %i/%i\n\n',ii,n_runs)
-        [results, history, opt] = staliro(modelname, init_cond, input_range_hecate, cp_array_hecate, phi_hecate, preds_hecate, simulationTime, hecate_opt);
-
-        % Save the name of the Hecate parameters
-        results.HecateParam = {input_search.Name}';
-        history.HecateParam = {input_search.Name}';
-
-        % Add results to the array
-        Results = [Results; results];
-        History = [History; history];
-        Options = [Options; opt];
-
-%         save(fileStr);
-	    assignin('base','ResultsHecate',Results)
-        assignin('base','HistoryHecate',History)
+    % Execute HECATE in a Try-Catch block so that if execution fails, the
+    % commented part (i.e., test assesments) are then uncommented
+    try
+        % Run Hecate
+        for ii = 1:n_runs
+            fprintf('\n\t\t*\t*\t*\n\nRun: %i/%i\n\n',ii,n_runs)
+            [results, history, opt] = staliro(modelname, init_cond, input_range_hecate, cp_array_hecate, phi_hecate, preds_hecate, simulationTime, hecate_opt);
+    
+            % Save the name of the Hecate parameters
+            results.HecateParam = {input_search.Name}';
+            history.HecateParam = {input_search.Name}';
+    
+            % Add results to the array
+            Results = [Results; results];
+            History = [History; history];
+            Options = [Options; opt];
+    
+    %         save(fileStr);
+	        assignin('base','ResultsHecate',Results)
+            assignin('base','HistoryHecate',History)
+        end
+    catch ME
+        % Uncomment the Test Assessment block
+        set_param(test_assessment_path,'Commented','off');
+        % Close Simulink model
+        save_system(modelname)
+        causeException = MException('MATLAB:Hecate:HecateError',msg);
+        ME = addCause(ME,causeException);
+        rethrow(ME)
     end
     
     %% Close the model and save the results
