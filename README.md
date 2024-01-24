@@ -4,7 +4,8 @@ Hecate is a testing approach for Simulink models using the Test Sequence and Tes
 The details of the underlying algorithm are described in the following paper:
 
 > F. Formica, T. Fan, A. Rajhans, V. Pantelic, M. Lawford and C. Menghi, "Simulation-based Testing of Simulink Models with Test Sequence and Test Assessment Blocks," in IEEE Transactions on Software Engineering, doi: 10.1109/TSE.2023.3343753.
-For the Models and Results presented in the paper above, check the branch `TSE`.
+
+For the Models and Results presented in the paper above, check the branch `TSE23`.
 
 The main content in this repository are:
  
