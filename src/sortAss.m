@@ -55,8 +55,12 @@ function AsInfo_sorted = sortAss(AsInfo_unsorted,AsInfo_sorted_old,stepName,acti
     if ~isempty(AsInfo_unsorted)
         
         % Get the name of the parent step
-        strTemp = split(stepName,".");
-        stepRoot = join(strTemp(1:end-1),".");
+        if ~contains(stepName,".") && strcmp(activeScenario,"")
+            stepRoot = "";
+        else
+            strTemp = split(stepName,".");
+            stepRoot = join(strTemp(1:end-1),".");
+        end
 
         % Search for first sub-step
         if any(strcmp(AsInfo_unsorted.Parent,stepName) & AsInfo_unsorted.Hierarchy > AsInfo_sorted.Hierarchy(end))
