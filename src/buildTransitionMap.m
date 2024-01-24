@@ -194,7 +194,7 @@ for ii = 1:size(stepTableNew,1)
         end
 
         if ~isempty(stepTableNew.WhenCondition{ii})
-            if ~isempty(transCond)
+            if ~strcmp(transCond,"")
                 transCond = transCond + "|";
             end
             transCond = transCond + "~(" + stepTableNew.WhenCondition{ii} + ")";
