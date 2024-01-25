@@ -14,6 +14,14 @@ The main content in this repository are:
 
 **Note**: Hecate relies on S-Taliro for its search algorithms. Make sure to read the Installation instructions and download S-Taliro.
 
+## Requirements
+Hecate requires to have Matlab installed together with some add-ons. In particular:
+
+* Matlab version r2022b or newer (older versions of Matlab have not been tested, but may still work).
+* Simulink
+* Signal Processing Toolbox
+* Simulink Test Toolbox
+
 ## How to install
 To run this tool, it is necessary to download S-Taliro from the following link: https://app.assembla.com/spaces/s-taliro_public/subversion/source/HEAD/trunk
 
