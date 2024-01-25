@@ -26,14 +26,14 @@ end
 % they can interfere with normal running of the software if they are added
 % to the active path by mistake.
 if exist(staliroPath + "/benchmarks","dir") == 7
-    rmdir(staliroPath + "/benchmarks");
+    rmdir(staliroPath + "/benchmarks","s");
 else
     warning(sprintf("The folder 'staliro/benchmarks' was not found. Either it has already\n" + ...
         "been removed or the path to the S-Taliro folder is incorrect."));
 end
 
 if exist(staliroPath + "/demos","dir") == 7
-    rmdir(staliroPath + "/demos");
+    rmdir(staliroPath + "/demos","s");
 else
     warning(sprintf("The folder 'staliro/demos' was not found. Either it has already\n" + ...
         "been removed or the path to the S-Taliro folder is incorrect."));

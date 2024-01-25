@@ -25,7 +25,7 @@ To properly install Hecate make sure to follow these steps:
 4. Open Matlab and add to the path `src`.
 5. Run the function `updateStaliro` by providing the folder name containing S-Taliro.  
 E.g.:	`updateStaliro('./staliro');`
-6. Hecate should now be installed successfully. Try to run the Tutorial to check if everything is working properly.
+6. Hecate should now be installed successfully. Try to run the Tutorial to check if everything is working properly. 
 
 **Note:** This operation must be performed only once, after downloading S-Taliro for the first time.
 
@@ -34,6 +34,16 @@ Hecate can be run using the function `hecate`.
 Use `help hecate` in Matlab to have more details on the function or check the Tutorial example in `./Tutorial/runTutorial.m` (the model is saved in Matlab 2022.b, so it requires a version equal or higher of Matlab to run).
 
 The files `./src/hecate_options.m` and `./staliro/staliro_options.m` contain useful information on the effect of each option and its default value.
+
+The tutorial can be run after adding to the active path the `src` folder, the `Tutorial` folder, and the `staliro` folder with all its subfolders.
+The following code adds to the path all the required folders and run the tutorial example:
+
+```matlab
+addpath("src")
+addpath("Tutorial")
+addpath(genpath("staliro"))
+runTutorial;
+```
 
 # Contributors
 The following authors contributed to the creation of Hecate:

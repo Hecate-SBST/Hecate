@@ -23,7 +23,7 @@ warning off Stateflow:cdr:UnusedDataOrEvent
 rng("shuffle")
 
 % Define the model name (the file extension can be omitted)
-modelName = 'Automatic_Transmission';
+modelName = 'AutomaticTransmission';
 
 % Define Hecate parameter properties in a struct array variable.
 % Each Hecate parameter must be defined in this array, even if they are not
@@ -112,7 +112,7 @@ hecateOpt.disp_results = 1;
 
 %% Run Hecate
 
-[Results,History,Options] = hecate(model,inputParam,simulationTime,hecateOpt);
+[Results,History,Options] = hecate(modelName,inputParam,simulationTime,hecateOpt);
 
 %% Save results
 
