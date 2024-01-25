@@ -19,12 +19,13 @@ To run this tool, it is necessary to download S-Taliro from the following link: 
 
 To properly install Hecate make sure to follow these steps:
 
-1. Download S-Taliro from the link above.
-2. Unzip the folder, rename it `staliro` (optional), and put it inside this repo at the top level (together with `src` and `Tutorial`).
-3. Open Matlab and add to the path `src`.
-4. Run the function `updateStaliro` by providing the folder name containing S-Taliro.  
+1. Clone this repository.
+2. Download S-Taliro from the link above.
+3. Unzip the folder, rename it `staliro` (optional), and put it inside this repo at the top level (together with `src` and `Tutorial`).
+4. Open Matlab and add to the path `src`.
+5. Run the function `updateStaliro` by providing the folder name containing S-Taliro.  
 E.g.:	`updateStaliro('./staliro');`
-5. Hecate should now be installed successfully. Try to run the Tutorial to check if everything is working properly.
+6. Hecate should now be installed successfully. Try to run the Tutorial to check if everything is working properly.
 
 **Note:** This operation must be performed only once, after downloading S-Taliro for the first time.
 
