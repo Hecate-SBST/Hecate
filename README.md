@@ -1,5 +1,5 @@
 # Replication package
-This repository contains a full replication package for the results presented in the paper below:
+This repository contains a full replication package for the results presented in the paper below: 
 
 > F. Formica, T. Fan, A. Rajhans, V. Pantelic, M. Lawford and C. Menghi, "Simulation-based Testing of Simulink Models with Test Sequence and Test Assessment Blocks," in IEEE Transactions on Software Engineering, doi: 10.1109/TSE.2023.3343753.
 
