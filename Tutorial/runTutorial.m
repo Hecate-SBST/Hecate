@@ -5,6 +5,12 @@
 % Make sure you have installed Hecate as described in the README.md and
 % that the Hecate src folder has been added to the active path.
 
+% Add to the path the relevant folders. This does nothing if the folders
+% have already been added to the path. Change the name of the folder
+% containing S-Taliro based on the name you used.
+addpath("src")
+addpath(genpath("staliro"))
+
 %% Remove unnecessary warnings (optional)
 % Running Hecate can trigger some warning messages. This is normal and
 % expected behaviour, so this section deactivates some specific warnings.

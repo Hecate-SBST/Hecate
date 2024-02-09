@@ -43,13 +43,11 @@ Use `help hecate` in Matlab to have more details on the function or check the Tu
 
 The files `./src/hecate_options.m` and `./staliro/staliro_options.m` contain useful information on the effect of each option and its default value.
 
-The tutorial can be run after adding to the active path the `src` folder, the `Tutorial` folder, and the `staliro` folder with all its subfolders.
-The following code adds to the path all the required folders and run the tutorial example:
+The tutorial can be run after adding to the active path the `src` folder, the `Tutorial` folder, and the `staliro` folder with all its subfolders.  
+The following code adds to the path the `Tutorial` folder and run the tutorial example. The `src` and `staliro` folder are added automatically by the script. If you used a different name from `staliro` for the folder containing the S-Taliro installation, make sure to update the name on line 12 of `runTutorial`.
 
 ```matlab
-addpath("src")
 addpath("Tutorial")
-addpath(genpath("staliro"))
 runTutorial;
 ```
 
