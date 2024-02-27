@@ -22,21 +22,28 @@ if isa(staliroPath,"char")
     staliroPath = string(staliroPath);
 end
 
+% Success boolean variable
+success = false;
+
 % Remove the 'benchmarks' and 'demos' folders. This is not necessary, but
 % they can interfere with normal running of the software if they are added
 % to the active path by mistake.
 if exist(staliroPath + "/benchmarks","dir") == 7
     rmdir(staliroPath + "/benchmarks","s");
+    success = true;
 else
-    warning(sprintf("The folder 'staliro/benchmarks' was not found. Either it has already\n" + ...
-        "been removed or the path to the S-Taliro folder is incorrect."));
+    warning(sprintf("The folder '%s/benchmarks' was not found. Either it has already\n" + ...
+        "been removed or the path to the S-Taliro folder is incorrect.",staliroPath));
+    success = false;
 end
 
 if exist(staliroPath + "/demos","dir") == 7
     rmdir(staliroPath + "/demos","s");
+    success = success & true;
 else
-    warning(sprintf("The folder 'staliro/demos' was not found. Either it has already\n" + ...
-        "been removed or the path to the S-Taliro folder is incorrect."));
+    warning(sprintf("The folder '%s/demos' was not found. Either it has already\n" + ...
+        "been removed or the path to the S-Taliro folder is incorrect.",staliroPath));
+    success = false;
 end
 
 % Remove the original function 'staliro/auxiliary/Compute_Robustness.m'.
@@ -44,8 +51,21 @@ end
 % customized for Hecate.
 if exist(staliroPath + "/auxiliary/Compute_Robustness.m","file") == 2
     delete(staliroPath + "/auxiliary/Compute_Robustness.m");
+    success = success & true;
 else
-    warning(sprintf("The file 'staliro/auxiliary/Compute_Robustness.m' was not found.\n" + ...
-        "Either it has already been removed or the path to the S-Taliro folder is incorrect."));
+    warning(sprintf("The file '%s/auxiliary/Compute_Robustness.m' was not found.\n" + ...
+        "Either it has already been removed or the path to the S-Taliro folder is incorrect.",staliroPath));
+    success = false;
 end
+
+% Print success message
+if success
+    fprintf("All the relevant files have been replaced inside S-Taliro. Hecate can be now used.\n" + ...
+        "Please check 'help hecate' for instructions on the syntax of the function.\n\n")
+else
+    fprintf("One or more files have already been removed or were not found.\n" + ...
+        "If the update process was already performed before, there is no need to run it again.\n" + ...
+        "Otherwise, check that the S-Taliro path was correct.\n\n")
+end
+
 end
