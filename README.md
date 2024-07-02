@@ -20,7 +20,7 @@ Hecate requires to have Matlab installed together with some add-ons. In particul
 * Matlab version r2022b or newer (older versions of Matlab have not been tested, but may still work).
 * Simulink
 * Signal Processing Toolbox
-* Simulink Test Toolbox
+* Simulink Test
 
 ## How to install
 To run this tool, it is necessary to download S-Taliro from the following link: https://app.assembla.com/spaces/s-taliro_public/subversion/source/HEAD/trunk
