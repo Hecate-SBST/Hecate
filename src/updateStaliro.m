@@ -28,33 +28,33 @@ success = false;
 % Remove the 'benchmarks' and 'demos' folders. This is not necessary, but
 % they can interfere with normal running of the software if they are added
 % to the active path by mistake.
-if exist(staliroPath + "/benchmarks","dir") == 7
-    rmdir(staliroPath + "/benchmarks","s");
+if exist(staliroPath + filesep + "benchmarks","dir") == 7
+    rmdir(staliroPath + filesep + "benchmarks","s");
     success = true;
 else
-    warning(sprintf("The folder '%s/benchmarks' was not found. Either it has already\n" + ...
-        "been removed or the path to the S-Taliro folder is incorrect.",staliroPath));
+    warning(sprintf("The folder '%s%sbenchmarks' was not found. Either it has already\n" + ...
+        "been removed or the path to the S-Taliro folder is incorrect.",staliroPath,filesep));
     success = false;
 end
 
-if exist(staliroPath + "/demos","dir") == 7
-    rmdir(staliroPath + "/demos","s");
+if exist(staliroPath + filesep + "demos","dir") == 7
+    rmdir(staliroPath + filesep + "demos","s");
     success = success & true;
 else
-    warning(sprintf("The folder '%s/demos' was not found. Either it has already\n" + ...
-        "been removed or the path to the S-Taliro folder is incorrect.",staliroPath));
+    warning(sprintf("The folder '%s%sdemos' was not found. Either it has already\n" + ...
+        "been removed or the path to the S-Taliro folder is incorrect.",staliroPath,filesep));
     success = false;
 end
 
 % Remove the original function 'staliro/auxiliary/Compute_Robustness.m'.
 % This is necessary, as this function must be replaced by a version
 % customized for Hecate.
-if exist(staliroPath + "/auxiliary/Compute_Robustness.m","file") == 2
-    delete(staliroPath + "/auxiliary/Compute_Robustness.m");
+if exist(staliroPath + filesep + "auxiliary" + filesep + "Compute_Robustness.m","file") == 2
+    delete(staliroPath + filesep + "auxiliary" + filesep + "Compute_Robustness.m");
     success = success & true;
 else
-    warning(sprintf("The file '%s/auxiliary/Compute_Robustness.m' was not found.\n" + ...
-        "Either it has already been removed or the path to the S-Taliro folder is incorrect.",staliroPath));
+    warning(sprintf("The file '%s%sauxiliary%sCompute_Robustness.m' was not found.\n" + ...
+        "Either it has already been removed or the path to the S-Taliro folder is incorrect.",staliroPath,filesep,filesep));
     success = false;
 end
 
