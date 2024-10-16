@@ -11,31 +11,20 @@ The main content in this repository are:
  
 * `src`: it contains the functions needed to run Hecate.
 * `Tutorial`: it contains a Simulink model and a script to run Hecate on it. The script details some information on the input parameters to the function.
-
-**Note**: Hecate relies on S-Taliro for its search algorithms. Make sure to read the Installation instructions and download S-Taliro.
+* `staliro`: it contains some functions from the tool [S-Taliro](https://users.fit.cvut.cz/~apelttom/s_taliro.html) which are resused by our tool. Some functions have been customised to work on Hecate, so they work differently from a stable version of S-Taliro.
 
 ## Requirements
 Hecate requires to have Matlab installed together with some add-ons. In particular:
 
 * Matlab version r2022b or newer (older versions of Matlab have not been tested, but may still work).
 * Simulink
-* Signal Processing Toolbox
 * Simulink Test
 
 ## How to install
-To run this tool, it is necessary to download S-Taliro from the following link: https://app.assembla.com/spaces/s-taliro_public/subversion/source/HEAD/trunk
+To install Hecate is sufficient to clone this repository.
+No additional operations are needed.
 
-To properly install Hecate make sure to follow these steps:
-
-1. Clone this repository.
-2. Download S-Taliro from the link above.
-3. Unzip the folder, rename it `staliro` (optional), and put it inside this repo at the top level (together with `src` and `Tutorial`).
-4. Open Matlab and add to the path `src`.
-5. Run the function `updateStaliro` by providing the folder name containing S-Taliro.  
-E.g.:	`updateStaliro('./staliro');`
-6. Hecate should now be installed successfully. Try to run the Tutorial to check if everything is working properly. 
-
-**Note:** This operation must be performed only once, after downloading S-Taliro for the first time.
+To properly use Hecate, make sure that the folders `src` and `staliro` are part of the active path on Matlab.
 
 ## How to Run
 Hecate can be run using the function `hecate`.  
@@ -57,4 +46,5 @@ The following authors contributed to the creation of Hecate:
 * *Federico Formica*, McMaster University, Canada:  
 `formicaf at mcmaster dot ca`
 * *Tony Fan*, McMaster University, Canada
+* *Alessandro Fischetti*, University of Bergamo, Italy
 * *Claudio Menghi*, University of Bergamo, Italy and McMaster University, Canada
