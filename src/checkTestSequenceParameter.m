@@ -59,7 +59,7 @@ for ii = 1:length(paramTS)
 
     % Check that the parameter is mentioned in the steps or transitions of
     % the actual scenario.
-    if any(contains(stepTable.Action,paramTS{ii}))
+    if any(contains(stepTable.Action,paramTS{ii}) | contains(stepTable.WhenCondition,paramTS{ii}))
         idx = strcmp(paramTS{ii},inputTable.Name);
         inputParamNew = [inputParamNew, inputParam(idx)];
     elseif ~isempty(transTable) && any(contains(transTable.Condition,paramTS{ii}))
