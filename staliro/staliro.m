@@ -770,6 +770,9 @@ end
 results.run(staliro_opt.runs) = struct('bestRob',[],'bestSample',[],'nTests',[],'bestCost',[],'paramVal',[],'falsified',[],'time',[]);
 if opt.TimeStatsCollect
     history(staliro_opt.runs) = struct('rob',[],'samples',[],'cost',[],'simTimes',[],'robTimes',[]);
+% % % Change for GA_Taliro
+elseif strcmp(opt.optimization_solver,'GA_Taliro')
+    history = [];
 else
     history(staliro_opt.runs) = struct('rob',[],'samples',[],'cost',[]);
 end
@@ -811,14 +814,22 @@ for ii = 1:staliro_opt.runs
     % Run S-TaLiRo
     tmc = tic;
     if nargout>1
-        [getRun, getHistory] = feval(staliro_opt.optimization_solver,InpRange,staliro_opt);        
+        % % % Change for GA_Taliro
+        if strcmp(staliro_opt.optimization_solver,'GA_Taliro')
+            % Genetic Algorithm does not return the History variable
+            getRun = feval(staliro_opt.optimization_solver,InpRange,staliro_opt);
+        else
+            [getRun, getHistory] = feval(staliro_opt.optimization_solver,InpRange,staliro_opt);
+        end
+        
         if opt.TimeStatsCollect
             history(ii).rob = getHistory.rob;
             history(ii).samples = getHistory.samples;
             history(ii).cost = getHistory.cost;
             history(ii).simTimes = staliro_timeStats.getSimTimes;
             history(ii).robTimes = staliro_timeStats.getRobTimes;
-        else
+            % % % Change for GA_Taliro
+        elseif ~strcmp(staliro_opt.optimization_solver,'GA_Taliro')
             history(ii) = getHistory;
         end
     else
