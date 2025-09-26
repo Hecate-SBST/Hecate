@@ -1,4 +1,4 @@
-function [testAssessmentPath,testSequencePath,hecateOpt] = simConfig(modelName,inputParam,hecateOpt,modelFcn)
+function [testAssessmentPath,testSequencePath,hecateOpt] = simConfigTA(modelName,inputParam,hecateOpt,modelFcn)
 % Simulate the model once and get the block path and set the active
 % scenario, of the Test Sequence and Test Assessment blocks and get all
 % input signals to the Test Assessment block.
@@ -134,13 +134,24 @@ if assSetSummary.Total < 1
 end
 
 % Get the blockpath to the test assessment block
-as = get(assSet,1); % Get first assessment object from the set
-testAssessmentPath = string(as.BlockPath.getBlock(1)); % Path to Test Assessment block that the assessment object belongs to
+tables_Temp = slreq.modeling.find(modelName);
+for ii = 1:assSetSummary.Total
+    asTemp = get(assSet,ii); % Get assessment object from the set
+    % Check that it is not from a Requirements Table
+    if ~any(strcmp(asTemp.BlockPath.getBlock(1),{tables_Temp.Path}))
+        testAssessmentPath = string(asTemp.BlockPath.getBlock(1)); % Path to Test Assessment block that the assessment object belongs to
+        break
+    end
+end
 
 % Check that all the active assessments come from the same Test Assessment
 % block
 for ii = 1:assSetSummary.Total
     asTemp = get(assSet,ii);
+    % Skip if the assessment comes from a Requirements Table
+    if any(strcmp(asTemp.BlockPath.getBlock(1),{tables_Temp.Path}))
+        continue
+    end
     if ~strcmp(testAssessmentPath, asTemp.BlockPath.getBlock(1))
         error("There must be only one Test Assessment block active at the same time. Comment out all the unnecessary blocks.")
     end
@@ -160,7 +171,6 @@ hecateOpt = checkScenario(hecateOpt,testAssessmentPath,false);
 % Get the name of the Test Sequence block
 testSequencePath = "";    % Reset the name of the Test Sequence path
 listTS = sltest.testsequence.find;
-
 
 for ii = 1:length(listTS)
     commentBool = strcmp(get_param(listTS{ii},"Commented"),"on");

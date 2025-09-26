@@ -13,9 +13,6 @@ function fitFormula = convertAtomPred(AtomPred)
 % Output:
 %   fitFormula: character array containing the formula that express the
 %   fitness value of the given Atomic Predicate.
-%
-% (C) 2022, Federico Formica, Tony Fan, McMaster University
-% (C) 2024, Federico Formica, McMaster University
 
 splitPred = regexp(AtomPred, '^([\s\S]+?)([<>=~]+)([\s\S]+?)$', 'tokens');
 splitPred = splitPred{1};
@@ -25,10 +22,10 @@ switch sign
         fitFormula = [splitPred{3},'-(',splitPred{1},')'];
     case {'>', '>='}
         fitFormula = [splitPred{1},'-(',splitPred{3},')'];
-    case '=='
-        fitFormula = ['-1*(',AtomPred,')+abs(',splitPred{1},'-(',splitPred{3},'))'];
     case '~='
-        fitFormula = ['-1+1*(',AtomPred,')-abs(',splitPred{1},'-(',splitPred{3},'))'];
+        fitFormula = ['-1+(',AtomPred,')+abs(',splitPred{1},'-(',splitPred{3},'))'];
+    case '=='
+        fitFormula = ['(',AtomPred,')-abs(',splitPred{1},'-(',splitPred{3},'))'];
     otherwise
         error('The operator %s in the verify statement is not supported.',sign)
 end

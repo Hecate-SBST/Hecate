@@ -14,7 +14,7 @@
 %
 % NOTE: For more information on properties, click on them.
 
-% (C) 2024, Federico Formica, McMaster University
+% (C) 2025, Federico Formica, McMaster University
 
 classdef hecate_options < staliro_options
 
@@ -75,6 +75,20 @@ classdef hecate_options < staliro_options
         %   Failure-Revealing test case are considered. If no run finds a
         %   Failure-Revealing test case, then these two parameters are "-".
         disp_results = 0;
+
+        % Choose whether to read the model specification from a Test
+        % Assessment or Requirements Table
+        %
+        %   Default option: spec_source = 'test_assessment';
+        %
+        %   This option specifies whether Hecate will look for a Test
+        %   Assessment block or a Requirements Table block. The model
+        %   specification will be read from the given source and used to
+        %   create the fitness generator.
+        %   The available options are either:
+        %   - 'test assessment': for a Test Assessment block.
+        %   - 'requirements table': for a Requirements Table block.
+        spec_source = 'test_assessment';
 
     end
 

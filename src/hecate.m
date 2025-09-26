@@ -24,8 +24,8 @@ function [Results,History,Options] = hecate(modelName,inputParam,simulationTime,
 %   overwrites what is specified in the Simulink model.
 %
 %   hecateOpt: object of type hecate_options. It contains information on
-%   the Test Sequence and Test Assessment scenarios and how to execute the
-%   search algorithm.
+%   the Test Sequence and Test Assessment scenarios or Requirements Table
+%   and how to execute the search algorithm.
 %
 % Output:
 %   Results: struct array containing the main results of the Hecate
@@ -43,20 +43,42 @@ function [Results,History,Options] = hecate(modelName,inputParam,simulationTime,
 %   Options: object of type hecate_options. It is a copy of hecateOpt, but
 %   some options may have been updated by the algorithm automatic checks.
 %
-% The details of this algorithm have been presented in the following paper:
-% F. Formica, T. Fan, A. Rajhans, V. Pantelic, M. Lawford and C. Menghi,
-% "Simulation-based Testing of Simulink Models with Test Sequence and Test
-% Assessment Blocks," in IEEE Transactions on Software Engineering, doi:
-% 10.1109/TSE.2023.3343753.
+% This algorithm have been presented in the following papers:
+%   * F. Formica, T. Fan, A. Rajhans, V. Pantelic, M. Lawford and C.
+%   Menghi, "Simulation-based Testing of Simulink Models with Test Sequence
+%   and Test Assessment Blocks," in IEEE Transactions on Software
+%   Engineering, doi: 10.1109/TSE.2023.3343753 .
+%   * F. Formica, C. George, S. Rahmatyan, V. Pantelic, M. Lawford, A.
+%   Gargantini, C. Menghi, "Search-based Testing of Simulink Models with
+%   Requirements Tables", pre-print available on arXiv at 
+%   https://arxiv.org/abs/2501.05412 .
 %
 % (C) 2022, Federico Formica, Tony Fan, McMaster University
 % (C) 2024, Federico Formica, McMaster University
 
 %% Create Fitness Converter subsystem
 
-% Find Test Sequence and Test Assessment path
+% Add subfolders to the path (if they aren't already).
+try
+    addpath("src/TestAssessment/")
+    addpath("src/RequirementsTable/")
+catch
+    warning("Make sure that the folders 'src/TestAssessment' and 'src/RequirementsTable'\n" + ...
+        "are part of the active path.")
+end
+
+% Find Test Sequence and Test Assessment/Requirements Table path
 if isa(modelName,"char") || isa(modelName,"string")
-    [assessmentPath,sequencePath] = simConfig(modelName,inputParam,hecateOpt);
+    if any(strcmpi(hecateOpt.spec_source,["test assessment","test_assessment","assessment"]))
+        [assessmentPath,sequencePath] = simConfigTA(modelName,inputParam,hecateOpt);
+    elseif any(strcmpi(hecateOpt.spec_source, ...
+        ["requirements table","requirements_table","requirement table","requirement_table","table"]))
+        [reqTablePath,sequencePath] = simConfigRT(modelName,inputParam,hecateOpt);
+        assessmentPath = '';
+    else
+        error("The 'spec_source' field of Hecate options contain an invalid value.\n" + ...
+            "Please use either 'test assessment' or 'requirements table'.")
+    end
 else
     error("Model type is not supported.")
 end
@@ -65,9 +87,6 @@ end
 stepTableTS = getAllSteps(hecateOpt.sequence_scenario,sequencePath);
 stepTableTS = sortAss(stepTableTS,[],[],hecateOpt.sequence_scenario);
 transTableTS = getAllTrans(stepTableTS,sequencePath);
-    % TODO: We are overwriting inputParam, considering only the relevant
-    % Hecate parameters and removing the negligible ones. Check if we are
-    % losing any useful information.
 inputParam = checkTestSequenceParameter(sequencePath,inputParam,stepTableTS,transTableTS);
 if isempty(inputParam)
     error("The selected Test Sequence scenario '%s' does not contain any Hecate parameter.\nTo use Hecate," + ...
@@ -77,14 +96,18 @@ end
 % Export Hecate parameters information to other functions.
 global inputSearch;
 inputSearch = inputParam;
-%setappdata(0,"inputSearch",inputParam);
 
 % Get content of Test Assessment and create fitness functions
-stepTableTA = getAllSteps(hecateOpt.assessment_scenario,assessmentPath);
-stepTableTA = sortAss(stepTableTA,[],[],hecateOpt.assessment_scenario);
-[stepTableTA, fitTable] = getFit(stepTableTA);
-transTableTA = getAllTrans(stepTableTA,assessmentPath);
-buildTransitionMap(assessmentPath, stepTableTA, transTableTA, fitTable);
+if any(strcmpi(hecateOpt.spec_source,["test assessment","test_assessment","assessment"]))
+    stepTableTA = getAllSteps(hecateOpt.assessment_scenario,assessmentPath);
+    stepTableTA = sortAss(stepTableTA,[],[],hecateOpt.assessment_scenario);
+    [stepTableTA, fitTable] = getFit(stepTableTA);
+    transTableTA = getAllTrans(stepTableTA,assessmentPath);
+    buildTransitionMap(assessmentPath, stepTableTA, transTableTA, fitTable);
+elseif any(strcmpi(hecateOpt.spec_source, ...
+        ["requirements table","requirements_table","requirement table","requirement_table","table"]))
+    [~, ~, ~] = buildFitnessFunction(modelName,reqTablePath);
+end
 
 %% Run test case generation algorithm
 
@@ -136,7 +159,9 @@ end
 
 % Comment out Test Assessment block to avoid interruptions due to assert
 % statements.
-set_param(assessmentPath,"Commented","on");
+if ~isempty(assessmentPath)
+    set_param(assessmentPath,"Commented","on");
+end
 
 % Use try-catch to uncomment block in case of errors
 try
@@ -169,12 +194,16 @@ try
 
     end
 catch except
-    set_param(assessmentPath,"Commented","off");
+    if ~isempty(assessmentPath)
+        set_param(assessmentPath,"Commented","off");
+    end
     rethrow(except);
 end
 
 % Uncomment the Test Assessment block
-set_param(assessmentPath,"Commented","off");
+if ~isempty(assessmentPath)
+    set_param(assessmentPath,"Commented","off");
+end
 
 %% Display Hecate results
 

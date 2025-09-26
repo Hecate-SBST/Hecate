@@ -1,14 +1,14 @@
-%% Tutorial on the use of Hecate on an Automotive model.
+%% Tutorial on the use of Hecate with Test Assessment on an Automotive model.
 % The following is a tutorial on how to use Hecate to generate
 % failure-revealing test case for a model of an automotive automatic
-% transmission.
+% transmission reading the specification from a Test Assessment block.
 % Make sure you have installed Hecate as described in the README.md and
 % that the Hecate src folder has been added to the active path.
 
 % Add to the path the relevant folders. This does nothing if the folders
 % have already been added to the path. Change the name of the folder
 % containing S-Taliro based on the name you used.
-addpath("src")
+addpath(genpath("src"))
 addpath(genpath("staliro"))
 
 %% Remove unnecessary warnings (optional)
@@ -20,6 +20,9 @@ warning off Stateflow:reactive:UnusedDataInReactiveTestingTableChart
 
 % Warning for unused symbols in the Fitness Converter Stateflow Chart.
 warning off Stateflow:cdr:UnusedDataOrEvent
+
+% Warning for requirement violation.
+warning off Stateflow:Runtime:TestVerificationFailed
 
 %% Define settings for Hecate
 
@@ -84,6 +87,10 @@ hecateOpt.optim_params.n_tests = 50;
 % considerations.
 hecateOpt.runs = 5;
 
+% This option specifies whether the tool should read a Test Assessment or a
+% Requirements Table block.
+hecateOpt.spec_source = "test_assessment";
+
 % This option defines which Test Sequence scenario must be used for test
 % case generation.
 % The model under consideration has three:
@@ -91,16 +98,16 @@ hecateOpt.runs = 5;
 % parameters).
 % * ThreeSteps: 1 Hecate parameter.
 % * Trapezoidal: 6 Hecate parameters.
-hecateOpt.sequence_scenario = 'ThreeSteps';
-% hecateOpt.sequence_scenario = 'Trapezoidal';
+% hecateOpt.sequence_scenario = 'ThreeSteps';
+hecateOpt.sequence_scenario = 'Trapezoidal';
 
 % This option defines which Test Assessment scenario must be used for
 % requirement specification.
 % The model under consideration has two:
 % * SpeedLimit: 1 step.
 % * TestGear: 5 steps.
-hecateOpt.assessment_scenario = 'SpeedLimit';
-% hecateOpt.assessment_scenario = 'TestGear';
+% hecateOpt.assessment_scenario = 'SpeedLimit';
+hecateOpt.assessment_scenario = 'TestGear';
 
 % This option allows to save the results after each run to minimise data
 % loss. In this case, the model is very fast, so we choose not to save the
@@ -124,7 +131,7 @@ hecateOpt.disp_results = 1;
 
 % Create file name
 fileStr = string(datetime("now","Format","yyyy-MMM-dd-HH:mm:ss"));
-fileStr = "./HecateTutorial_" + fileStr + ".mat";
+fileStr = "./HecateTutorialTA_" + fileStr + ".mat";
 
 % Save results
 save(fileStr);
