@@ -1,5 +1,5 @@
-<img src="logo_Hecate.png" align="right" width="150px"/>
 # Hecate
+<img src="logo_Hecate.png" align="right" width="150px"/>
 Hecate is a black-box testing approach for Simulink models.
 It uses a Test Sequence block to generate automatically test cases.
 The generation process is guided by a fitness function extracted either from a Test Assessment block or a Requirements Table block.
